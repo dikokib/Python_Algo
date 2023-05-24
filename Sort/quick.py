@@ -1,0 +1,31 @@
+import random
+
+def partition(numbers: list[int], low: int, high: int) -> int:
+    "pivotと比べて大きい時はiに+1してからiとjの位置を入れ替える"
+    i = low -1
+    pivot = numbers[high]
+    for j in range(low, high):
+        if numbers[j] <= pivot:
+            i += 1
+            numbers[i], numbers[j] = numbers[j], numbers[i]
+    #最後にpivotになっていた値をも適切な位置に移動させている
+    numbers[i+1], numbers[high] = numbers[high], numbers[i+1]
+    #pivotの位置を返す
+    return i+1
+
+def quick_sort(numbers: list[int]) -> list[int]:
+    def _quick_sort(numbers: list[int], low: int, high: int) -> None:
+        if low < high:
+            #partition_indexはpivot(右端)の位置情報を表している
+            partition_index = partition(numbers, low, high)
+            _quick_sort(numbers, low, partition_index-1)
+            _quick_sort(numbers, partition_index+1, high)
+
+    _quick_sort(numbers, 0, len(numbers)-1)
+    return numbers
+
+
+
+if __name__ == '__main__':
+    nums = [random.randint(0, 1000) for i in range(15)]
+    print(quick_sort(nums))
